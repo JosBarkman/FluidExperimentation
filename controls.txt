@@ -1,0 +1,6 @@
+The ScalarField build can be controlled using the A and D keys.
+
+The VectorField can be controlled in the inspector in Editor mode by adjusting the scale of the VectorField script's scale attribute,
+or in Play mode by using the A and D keys.
+
+The 2D and 3D water simulation experiments reset/play on pressing Spacebar.
