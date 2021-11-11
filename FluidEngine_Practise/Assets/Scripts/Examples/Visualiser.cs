@@ -1,5 +1,7 @@
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 
@@ -23,12 +25,14 @@ public class Visualiser : MonoBehaviour {
 
 
 
+#if UNITY_EDITOR
     private void OnDrawGizmos() {
         Handles.color = Color.yellow;
         Handles.DrawWireDisc( _startingPoint, Vector3.back, 0.08f );
         Handles.color = Color.red;
         Handles.DrawWireDisc( _endPoint, Vector3.back, 0.08f );
     }
+#endif
 
 
     public void SetWaves( Wave pA, Wave pB ) {

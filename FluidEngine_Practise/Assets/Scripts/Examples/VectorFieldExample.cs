@@ -18,6 +18,7 @@ public class VectorFieldExample : MonoBehaviour {
     private double _z = Math.PI / 4.0;
 
 
+    private AdaptScale _adaptScale = null;
     private Vector3[] _vectors;
     private float _vecLength = 0.175f;
     private double _oldScale;
@@ -28,13 +29,32 @@ public class VectorFieldExample : MonoBehaviour {
 
     private void Start() {
         CalculateVectors();
+        _adaptScale = GetComponent<AdaptScale>();
+        if ( null != _adaptScale ) {
+            _scale = Math.Max( Math.Min( _adaptScale.Scale, 0.25 ), 0.011 );
+            _adaptScale.Scale = _scale;
+        }
     }
 
 
     private void OnValidate() {
+        UpdateField();
+    }
+
+
+    private void Update() {
+        UpdateField();
+    }
+
+
+    private void UpdateField() {
+        if ( null != _adaptScale && _adaptScale.isActiveAndEnabled ) {
+            _scale = _adaptScale.Scale;
+        }
+
         if ( _scale != _oldScale || _size != _oldSize ) {
             _actualSize = GetSize( _size );
-            _vecLength = ( float )( 0.00000128173828125 * Mathf.Pow( _actualSize, 2f ) -0.00057421875 * _actualSize + 0.073 );
+            _vecLength = ( float )( 0.00000128173828125 * Mathf.Pow( _actualSize, 2f ) - 0.00057421875 * _actualSize + 0.073 );
             CalculateVectors();
             _oldScale = _scale;
             _oldSize = _size;

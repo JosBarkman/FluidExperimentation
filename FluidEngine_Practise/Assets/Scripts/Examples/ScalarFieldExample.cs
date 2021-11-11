@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 
+[RequireComponent( typeof( AdaptScale ))]
 public class ScalarFieldExample : MonoBehaviour {
     private readonly static ScalarField3 _scalarFieldA = new CustomScalarFieldA();
 
@@ -13,18 +14,38 @@ public class ScalarFieldExample : MonoBehaviour {
     private double _scale = 0.05;
 
 
+    private AdaptScale _adaptScale = null;
     private double _z = Math.PI / 2.0;
-    private Material _workingMat;
-    private double _oldScale;
+    private Material _workingMat = null;
+    private double _oldScale = 0.0;
 
 
 
     private void Start() {
         Show();
+        _adaptScale = GetComponent<AdaptScale>();
+        if ( null != _adaptScale ) {
+            _adaptScale.Scale = _scale;
+        }
     }
 
 
     private void OnValidate() {
+        UpdateField();
+    }
+
+
+    private void Update() {
+        UpdateField();
+    }
+
+
+    private void UpdateField() {
+        if ( null != _adaptScale && _adaptScale.isActiveAndEnabled ) {
+            _scale = Math.Max( Math.Min( _adaptScale.Scale, 0.07 ), 0.014 );
+            _adaptScale.Scale = _scale;
+        }
+
         if ( _scale != _oldScale ) {
             Show();
             _oldScale = _scale;
